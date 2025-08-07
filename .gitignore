@@ -11,3 +11,6 @@ __pycache__/
 
 # Archivos de datos (si no querés subirlos)
 *.h5
+
+# Archiv env
+.env
