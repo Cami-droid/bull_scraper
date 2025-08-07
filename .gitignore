@@ -1,0 +1,13 @@
+# Entorno virtual
+venv/
+
+# Caché de Python
+__pycache__/
+*.pyc
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Archivos de datos (si no querés subirlos)
+*.h5
