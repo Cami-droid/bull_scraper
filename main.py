@@ -7,31 +7,38 @@ from storage import save_to_hdf5
 import os
 
 def main():
+    # 1️⃣ Verificar chromedriver
     if not os.path.exists(CHROMEDRIVER_PATH):
-        print("Chromedriver no encontrado.")
+        print("❌ Chromedriver no encontrado en la ruta especificada.")
         return
 
+    # 2️⃣ Iniciar driver
     service = ChromeService(executable_path=CHROMEDRIVER_PATH)
     driver = webdriver.Chrome(service=service)
 
+    # 3️⃣ Login
     cookies = perform_login(driver, BMB_USERNAME, BMB_PASSWORD, LOGIN_URL)
     if not cookies:
-        print("Login fallido.")
+        print("❌ Login fallido.")
         driver.quit()
         return
 
+    # 4️⃣ Extraer tablas
     dataframes = {}
     for url in URLS:
-        print(f"Procesando {url}")
+        nombre_tabla = url.split("/")[-1].replace('%20', ' ')
+        print(f"📥 Procesando: {nombre_tabla}")
         df = extract_table(driver, url, cookies)
         if df is not None:
-            name = url.split("/")[-1].replace('%20', ' ')
-            dataframes[name] = df
+            dataframes[nombre_tabla] = df
 
     driver.quit()
+
+    # 5️⃣ Guardar resultados
     if dataframes:
         save_to_hdf5(HDF5_FILE, dataframes)
-        print(f"Tablas guardadas en {HDF5_FILE}")
+    else:
+        print("⚠️ No se obtuvieron datos de ninguna URL.")
 
 if __name__ == "__main__":
     main()
