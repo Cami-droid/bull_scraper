@@ -44,7 +44,7 @@ def extract_table(driver, url, cookies):
         if table:
             df = pd.read_html(str(table))[0]
             df['Tipo_Tabla'] = url.split('/')[-1].replace('%20', ' ')
-            df['Fecha_Cotizacion'] = datetime.now().strftime('%Y-%m-%d')
+            df['fecha_cotizacion'] = datetime.now().strftime('%Y-%m-%d')
             
             # Eliminar el debug si está activado pero ya no se necesita
             if DEBUG and html_path and os.path.exists(html_path):
