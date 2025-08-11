@@ -28,14 +28,21 @@ def main():
     df_dashboard = extract_dashboard_data(driver, "https://www.bullmarketbrokers.com/Clients/Dashboard")
     if df_dashboard is not None and not df_dashboard.empty:
         dataframes['dashboard'] = df_dashboard
+        print("✔️ Datos del dashboard extraídos exitosamente.")
+        print(df_dashboard)
+    else:
+        print("❌ No se pudieron extraer los datos del dashboard.")
 
     # 🔹 Extraer todas las demás tablas
     for url in URLS:
         nombre_tabla = url.split("/")[-1].replace('%20', ' ')
         print(f"📥 Procesando: {nombre_tabla}")
         df = extract_table(driver, url, cookies)
-        if df is not None:
+        if df is not None and not df.empty:
             dataframes[nombre_tabla] = df
+            print(f"✔️ Tabla '{nombre_tabla}' extraída. Dimensiones: {df.shape}")
+        else:
+            print(f"❌ No se pudo extraer la tabla '{nombre_tabla}'.")
 
     driver.quit()
 
@@ -43,7 +50,7 @@ def main():
         save_to_hdf5(HDF5_FILE, dataframes)
         print(f"💾 Tablas guardadas en {HDF5_FILE}")
     else:
-        print("⚠️ No se obtuvieron datos.")       
+        print("⚠️ No se obtuvieron datos para guardar.")       
 
 if __name__ == "__main__":
     main()
