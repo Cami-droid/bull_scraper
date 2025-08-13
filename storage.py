@@ -7,6 +7,12 @@ def save_to_hdf5(hdf5_file, dataframes):
         mode = 'a' if os.path.exists(hdf5_file) else 'w'
         with pd.HDFStore(hdf5_file, mode=mode) as store:
             for name, df_new in dataframes.items():
+                
+                # --- Filtro para evitar errores con DataFrames vacíos o nulos ---
+                if df_new is None or df_new.empty:
+                    print(f"⚠️ Saltando la tabla '{name}'. No hay datos válidos para guardar.")
+                    continue  # Pasa a la siguiente iteración del bucle
+                
                 key = name.replace(" ", "_").lower()
 
                 # Leer histórico si existe
