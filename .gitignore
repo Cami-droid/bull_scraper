@@ -9,8 +9,9 @@ __pycache__/
 *.log
 *.tmp
 
-# Archivos de datos (si no querés subirlos)
+# Archivos de datos
+data/
 *.h5
 
-# Archiv env
+# Archivo de entorno
 .env

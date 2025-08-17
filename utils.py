@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 import unicodedata
+from collections import Counter
 
 def sanitize_column_names(df):
     replacements = {
@@ -8,32 +9,36 @@ def sanitize_column_names(df):
         '(': '', ')': '', '%': 'pct'
     }
     
-    def clean(col):
-        # 1️⃣ Pasar a minúsculas
-        col = col.lower()
+    name_counts = Counter()
+    new_columns = {}
+    
+    for col in df.columns:
+        sane_col = col.lower()
         
-        # 2️⃣ Eliminar acentos y tildes
-        col = ''.join(
-            c for c in unicodedata.normalize('NFD', col)
+        sane_col = ''.join(
+            c for c in unicodedata.normalize('NFD', sane_col)
             if unicodedata.category(c) != 'Mn'
         )
-
-        # 3️⃣ Aplicar reemplazos simples
-        for a, b in replacements.items():
-            col = col.replace(a, b)
-
-        # 4️⃣ Sustituir cualquier cosa rara por guión bajo
-        col = re.sub(r'[^a-z0-9_]', '_', col)
-
-        # 5️⃣ Unificar guiones bajos múltiples
-        col = re.sub(r'_+', '_', col).strip('_')
-
-        # 6️⃣ Asegurarse de que no empiece con número
-        if col and not col[0].isalpha():
-            col = f"_{col}"
-
-        return col or "columna_generica"
-
-    df.columns = [clean(col) for col in df.columns]
-    return df
-
+        
+        for old, new in replacements.items():
+            sane_col = sane_col.replace(old, new)
+        
+        sane_col = re.sub(r'[^a-z0-9_]', '_', sane_col)
+        
+        sane_col = re.sub(r'_+', '_', sane_col).strip('_')
+        
+        if sane_col and sane_col[0].isdigit():
+            sane_col = f"_{sane_col}"
+        
+        if not sane_col:
+            sane_col = "columna_generica"
+        
+        if sane_col in name_counts:
+            name_counts[sane_col] += 1
+            sane_col = f"{sane_col}_{name_counts[sane_col]}"
+        else:
+            name_counts[sane_col] = 1
+        
+        new_columns[col] = sane_col
+    
+    return df.rename(columns=new_columns)

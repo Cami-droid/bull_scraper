@@ -3,13 +3,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Credenciales y configuración de Selenium
 BMB_USERNAME = os.getenv("BMB_USERNAME")
 BMB_PASSWORD = os.getenv("BMB_PASSWORD")
 CHROMEDRIVER_PATH = os.getenv("CHROMEDRIVER_PATH")
 LOGIN_URL = "https://bullmarketbrokers.com/Security/SignIn"
 
+# Configuración de almacenamiento HDF5
 HDF5_FILE = "cotizaciones_bullmarket_acumulado.h5"
+OUTPUT_DIR = "data/hdf5_dumps"  # Carpeta para archivos HDF5 diarios
+ACCUMULATE = False  # True para acumular en archivo histórico, False para solo diarios
 
+# URLs de extracción
 URLS = [
     "https://www.bullmarketbrokers.com/Cotizaciones/merval",
     "https://www.bullmarketbrokers.com/Cotizaciones/panel%20general",
