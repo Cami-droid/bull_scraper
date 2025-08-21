@@ -2,6 +2,11 @@ import pandas as pd
 import re
 import unicodedata
 from collections import Counter
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+# 🟢 CORRECTO: La importación de WebDriverWait debe ir aquí, al principio del archivo.
+from selenium.webdriver.support.ui import WebDriverWait
+
 
 def sanitize_column_names(df):
     replacements = {
@@ -42,3 +47,15 @@ def sanitize_column_names(df):
         new_columns[col] = sane_col
     
     return df.rename(columns=new_columns)
+    
+def wait_for_element(driver, locator, timeout=20):
+    """
+    Espera explícitamente a que un elemento sea visible en la página.
+    """
+    try:
+        return WebDriverWait(driver, timeout).until(
+            EC.visibility_of_element_located(locator)
+        )
+    except (TimeoutException, NoSuchElementException) as e:
+        print(f"❌ Error: El elemento con locator {locator} no se encontró en {timeout} segundos.")
+        return None
