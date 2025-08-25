@@ -7,10 +7,8 @@ from config import *
 from login import perform_login
 from scraper import extract_table
 from storage import save_to_hdf5
-from dashboard import extract_dashboard_data
 from utils import sanitize_column_names
 import os
-import time
 
 def main():
     try:
@@ -30,20 +28,7 @@ def main():
 
         dataframes = {}
 
-        # 🔹 Extraer dashboard
-        print("📊 Extrayendo datos del dashboard...")
-        # NOTA: Se está usando un archivo que proporcionaste anteriormente, "dashboard_to_excel.py", para la lógica.
-        # Por lo tanto, la siguiente línea se deja como estaba, pero ten en cuenta que la lógica del dashboard ya está en tu otro script.
-        df_dashboard = extract_dashboard_data(driver, "https://www.bullmarketbrokers.com/Clients/Dashboard", cookies)
-        if df_dashboard is not None and not df_dashboard.empty:
-            df_dashboard = sanitize_column_names(df_dashboard)
-            dataframes['dashboard'] = df_dashboard
-            print("✔️ Datos del dashboard extraídos exitosamente.")
-            print(df_dashboard)
-        else:
-            print("❌ No se pudieron extraer los datos del dashboard.")
-
-        # 🔹 Extraer otras tablas
+        # 🔹 Extraer tablas de cotizaciones
         for url in URLS:
             nombre_tabla = url.split("/")[-1].replace('%20', ' ')
             
@@ -67,13 +52,18 @@ def main():
                         EC.element_to_be_clickable((By.CSS_SELECTOR, "#panelFilters > div > div > div > div > div.filter-group > ul > li:nth-child(2) > button"))
                     )
                     boton_dolares.click()
-                    time.sleep(3) # Pausa para que la tabla se cargue
-                    print("✔️ Botón 'Dólares' clickeado.")
+                    
+                    # Espera explícita a que el elemento con ID 'prices-table' se vuelva a cargar
+                    WebDriverWait(driver, 10).until(
+                        EC.visibility_of_element_located((By.CSS_SELECTOR, "#prices-table"))
+                    )
+                    
+                    print("✔️ Vista de 'Dólares' cargada.")
 
                     # Extraer la tabla de cauciones en dólares
                     print(f"📥 Procesando la tabla de cauciones (dólares)...")
-                    # Se asume que extract_table puede ser llamada sin URL si el driver ya está en la página correcta
-                    df_dolar = extract_table(driver, url, cookies)
+                    # Llama a la función sin la URL y con is_loaded=True
+                    df_dolar = extract_table(driver, is_loaded=True)
                     if df_dolar is not None and not df_dolar.empty:
                         df_dolar = sanitize_column_names(df_dolar)
                         dataframes[f'{nombre_tabla}_dolar'] = df_dolar
