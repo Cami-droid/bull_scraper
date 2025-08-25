@@ -8,6 +8,8 @@ BMB_USERNAME = os.getenv("BMB_USERNAME")
 BMB_PASSWORD = os.getenv("BMB_PASSWORD")
 CHROMEDRIVER_PATH = os.getenv("CHROMEDRIVER_PATH")
 LOGIN_URL = "https://bullmarketbrokers.com/Security/SignIn"
+DASHBOARD_URL = "https://www.bullmarketbrokers.com/Clients/Dashboard"
+
 
 # Configuración de almacenamiento HDF5
 HDF5_FILE = "cotizaciones_bullmarket_acumulado.h5"

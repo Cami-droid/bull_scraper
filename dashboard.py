@@ -4,41 +4,53 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from datetime import datetime
-
-# Asegúrate de importar esta función si la tienes en utils.py
-# from utils import wait_for_element 
+import re
 
 def clean_numeric_value(value):
     """Limpia el texto de un valor y lo convierte a float."""
     if not isinstance(value, str):
         return None
     value = value.replace('.', '').replace(',', '.')
-    # Extraer solo el número si hay otros caracteres como el signo de pesos
     value = value.replace('$', '').strip()
     try:
         return float(value)
     except ValueError:
         return None
 
-def extract_dashboard_data(driver, url):
+def extract_dashboard_data(driver, dashboard_url, cookies):
+    print(f"\nNavegando al Dashboard: {dashboard_url}")
+    
     try:
-        driver.get(url)
+        # Primero, vamos a una URL base del dominio para poder inyectar cookies
+        driver.get("https://www.bullmarketbrokers.com/")
+
+        # Inyectar las cookies de sesión capturadas
+        for cookie in cookies:
+            cookie_copy = cookie.copy()
+            if 'domain' in cookie_copy: del cookie_copy['domain']
+            if 'expiry' in cookie_copy: del cookie_copy['expiry']
+            if 'expires' in cookie_copy: del cookie_copy['expires']
+            try:
+                driver.add_cookie(cookie_copy)
+            except Exception:
+                pass
+
+        # Ahora, ir al dashboard con la sesión activa
+        driver.get(dashboard_url)
         
-        # 🟢 Estos son los nuevos selectores para la estructura actual del dashboard
         selectors = {
-            "Dolar_MEP_Compra": "#div_home_index > div.col-md-4 > div:nth-child(1) > div:nth-child(1) > a > span:nth-child(1)",
-            "Dolar_MEP_Venta": "#div_home_index > div.col-md-4 > div:nth-child(1) > div:nth-child(2) > a",
-            "Dolar_CCL": "#div_home_index > div.col-md-8 > div.logged-pill.pull-left.fullWidth.money-resume > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > span:nth-child(1)",
-            "Dolar_Cable": "#div_home_index > div.col-md-8 > div.logged-pill.pull-left.fullWidth.money-resume > div:nth-child(2) > div:nth-child(3) > div:nth-child(3) > span:nth-child(1)"
+            "Dolar_MEP_Compra": "/html/body/div[2]/div/div[4]/div[2]/div[1]/div[1]/a/span[1]",
+            "Dolar_MEP_Venta": "/html/body/div[2]/div/div[4]/div[2]/div[1]/div[2]/a",
+            "Dolar_CCL": "/html/body/div[2]/div/div[4]/div[1]/div[5]/div[2]/div[2]/h4/a/span",
+            "Dolar_Cable": "/html/body/div[2]/div/div[4]/div[1]/div[5]/div[2]/div[3]/h4/a[2]/span"
         }
 
         data = {}
         print("Extrayendo valores del dashboard...")
 
-        # Usamos una única espera general para asegurar que al menos un elemento esté visible
         try:
             WebDriverWait(driver, 20).until(
-                EC.text_to_be_present_in_element((By.CSS_SELECTOR, selectors['dolar_mep_compra']), "$")
+                EC.visibility_of_element_located((By.XPATH, selectors['Dolar_MEP_Compra']))
             )
         except TimeoutException:
             print("⚠️ Timeout: Los datos del dólar MEP/CCL no se cargaron a tiempo. Se capturan como 'None'.")
@@ -48,10 +60,9 @@ def extract_dashboard_data(driver, url):
             df['fecha_scraping'] = datetime.now()
             return df
         
-        # Si la espera general fue exitosa, procedemos a extraer todos los valores
         for name, selector in selectors.items():
             try:
-                element = driver.find_element(By.CSS_SELECTOR, selector)
+                element = driver.find_element(By.XPATH, selector)
                 data[name] = clean_numeric_value(element.text)
                 print(f"  ✔️ {name}: {data[name]}")
             except NoSuchElementException:
