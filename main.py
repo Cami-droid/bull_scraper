@@ -36,14 +36,40 @@ def main():
             if 'cauciones' in url:
                 print(f"📥 Procesando la tabla de cauciones (pesos)...")
                 
-                # Extraer la tabla de cauciones en pesos
+                # Intentar extraer la tabla de cauciones en pesos
                 df_pesos = extract_table(driver, url, cookies)
-                if df_pesos is not None and not df_pesos.empty:
+                
+                # --- Lógica de rescate si la tabla no se carga ---
+                if df_pesos is None or df_pesos.empty:
+                    print("❌ La tabla de cauciones no se encontró. Intentando con el 'empujón'...")
+                    try:
+                        # Espera explícita a que la tabla se vuelva a cargar
+                        # Usar JavaScript para hacer clic, ya que es más robusto
+                        driver.execute_script("document.querySelector('#div_priceActives > div > label').click();")
+                        
+                        WebDriverWait(driver, 10).until(
+                            EC.visibility_of_element_located((By.CSS_SELECTOR, "#prices-table"))
+                        )
+                        print("✔️ Botón 'Ocultar sin precios' activado. Reintentando la extracción de la tabla de pesos...")
+
+                        # Reintentar la extracción de la tabla de cauciones en pesos
+                        df_pesos = extract_table(driver, is_loaded=True)
+                        if df_pesos is not None and not df_pesos.empty:
+                            df_pesos = sanitize_column_names(df_pesos)
+                            dataframes[f'{nombre_tabla}_pesos'] = df_pesos
+                            print(f"✔️ Tabla '{nombre_tabla}' en pesos extraída después del rescate. Dimensiones: {df_pesos.shape}")
+                        else:
+                            print(f"❌ No se pudo extraer la tabla '{nombre_tabla}' en pesos después del reintento.")
+
+                    except Exception as e:
+                        print(f"❗ Falló el intento de 'rescate': {e}")
+                        print(f"❌ No se pudo extraer la tabla '{nombre_tabla}' en pesos.")
+
+                # Si la extracción inicial fue exitosa, solo sanitiza y guarda
+                elif df_pesos is not None and not df_pesos.empty:
                     df_pesos = sanitize_column_names(df_pesos)
                     dataframes[f'{nombre_tabla}_pesos'] = df_pesos
                     print(f"✔️ Tabla '{nombre_tabla}' en pesos extraída. Dimensiones: {df_pesos.shape}")
-                else:
-                    print(f"❌ No se pudo extraer la tabla '{nombre_tabla}' en pesos.")
 
                 # Cambiar a la vista de Dólares haciendo clic en el botón
                 print("🔄 Cambiando a la vista de Dólares...")

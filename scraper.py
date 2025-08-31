@@ -3,18 +3,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-import time
-from utils import sanitize_column_names # Asegúrate de tener esta función en tu archivo utils.py
+from utils import sanitize_column_names
+from datetime import datetime # ¡Importar datetime es crucial!
 
 def extract_table(driver, url=None, cookies=None, is_loaded=False):
     """
     Extrae una tabla de una URL o de la página ya cargada.
-
-    Args:
-        driver (webdriver): La instancia del WebDriver de Selenium.
-        url (str, opcional): La URL de la página a scrapear. Si es None, no recarga la página.
-        cookies (list, opcional): Lista de cookies para la sesión.
-        is_loaded (bool): Si True, asume que la URL ya está cargada y no la recarga.
     """
     try:
         # Si la URL no está cargada, navega e inyecta las cookies
@@ -33,8 +27,7 @@ def extract_table(driver, url=None, cookies=None, is_loaded=False):
                         pass
             driver.get(url)
 
-        # Espera a que la tabla esté presente antes de intentar extraerla
-        # Ahora usamos el ID que me proporcionaste, lo que lo hace más fiable
+        # Espera a que la tabla esté presente
         WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.ID, "prices-table"))
         )
@@ -42,6 +35,11 @@ def extract_table(driver, url=None, cookies=None, is_loaded=False):
         # Lee la tabla con pandas
         df_list = pd.read_html(driver.page_source, attrs={'id': 'prices-table'})
         df = df_list[0]
+        
+        # --- LÓGICA AGREGADA ---
+        # 🟢 Añadir la columna 'fecha_scraping' con el timestamp actual
+        df['fecha_scraping'] = datetime.now()
+        # --- FIN DE LA LÓGICA AGREGADA ---
         
         return df
 
