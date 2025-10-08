@@ -98,7 +98,38 @@ def main():
                         print(f"❌ No se pudo extraer la tabla '{nombre_tabla}' en dólares.")
                 except Exception as e:
                     print(f"❗ Error al intentar extraer la tabla de cauciones en dólares: {e}")
-
+            
+            # --- Lógica específica para la tabla de lebacs ---
+            elif 'lebacs' in url:
+                print(f"📥 Procesando la tabla de lebacs...")
+                df_lebacs = extract_table(driver, url, cookies)
+                
+                if df_lebacs is None or df_lebacs.empty:
+                    print("❌ La tabla de lebacs no se encontró. Intentando el 'empujón'...")
+                    try:
+                        # Usar el mismo selector que para cauciones
+                        driver.execute_script("document.querySelector('#div_priceActives > div > label').click();")
+                        
+                        WebDriverWait(driver, 10).until(
+                            EC.visibility_of_element_located((By.CSS_SELECTOR, "#prices-table"))
+                        )
+                        print("✔️ Botón activado. Reintentando la extracción...")
+                        
+                        df_lebacs = extract_table(driver, is_loaded=True)
+                        if df_lebacs is not None and not df_lebacs.empty:
+                            df_lebacs = sanitize_column_names(df_lebacs)
+                            dataframes[nombre_tabla] = df_lebacs
+                            print(f"✔️ Tabla '{nombre_tabla}' extraída después del rescate. Dimensiones: {df_lebacs.shape}")
+                        else:
+                            print(f"❌ No se pudo extraer la tabla '{nombre_tabla}' después del reintento.")
+                    except Exception as e:
+                        print(f"❗ Falló el intento de 'rescate' para LEBACs: {e}")
+                        print(f"❌ No se pudo extraer la tabla '{nombre_tabla}'.")
+                else:
+                    df_lebacs = sanitize_column_names(df_lebacs)
+                    dataframes[nombre_tabla] = df_lebacs
+                    print(f"✔️ Tabla '{nombre_tabla}' extraída. Dimensiones: {df_lebacs.shape}")
+            
             # --- Lógica para el resto de tablas ---
             else:
                 print(f"📥 Procesando: {nombre_tabla}")

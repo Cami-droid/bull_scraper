@@ -9,6 +9,7 @@ BMB_PASSWORD = os.getenv("BMB_PASSWORD")
 CHROMEDRIVER_PATH = os.getenv("CHROMEDRIVER_PATH")
 LOGIN_URL = "https://bullmarketbrokers.com/Security/SignIn"
 DASHBOARD_URL = "https://www.bullmarketbrokers.com/Clients/Dashboard"
+CAUCIONES_URL = "https://www.bullmarketbrokers.com/Cotizaciones/cauciones"
 
 
 # Configuración de almacenamiento HDF5
@@ -23,7 +24,7 @@ URLS = [
     "https://www.bullmarketbrokers.com/Cotizaciones/cedears",
     "https://www.bullmarketbrokers.com/Cotizaciones/bonos",
     "https://www.bullmarketbrokers.com/Cotizaciones/opciones",
-    "https://www.bullmarketbrokers.com/Cotizaciones/lebacs",
+    "https://www.bullmarketbrokers.com/Cotizaciones/letras",
     "https://www.bullmarketbrokers.com/Cotizaciones/rofex",
     "https://www.bullmarketbrokers.com/Cotizaciones/licitaciones",
     "https://www.bullmarketbrokers.com/Cotizaciones/fondos",
