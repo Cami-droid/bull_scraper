@@ -35,6 +35,8 @@ def extract_table(driver, url=None, cookies=None, is_loaded=False):
         # Lee la tabla con pandas
         df_list = pd.read_html(driver.page_source, attrs={'id': 'prices-table'})
         df = df_list[0]
+        # 🔹 Convertir todo a texto (para preservar el formato argentino original)
+        df = df.astype(str)
         
         # --- LÓGICA AGREGADA ---
         # 🟢 Añadir la columna 'fecha_scraping' con el timestamp actual
