@@ -1,17 +1,34 @@
-# Entorno virtual
-venv/
+# --- Archivos temporales y de datos ---
+data/
+*.h5
+*.csv
+*.xlsx
+*.xls
+*.ods
+*.json
 
-# Caché de Python
+# --- Archivos de entorno ---
+.env
+*.log
 __pycache__/
 *.pyc
 
-# Archivos temporales
-*.log
+# --- Archivos generados por Selenium o Chrome ---
+chromedriver.exe
 *.tmp
 
-# Archivos de datos
-data/
-*.h5
+# --- Configuración de sistema / IDE ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
 
-# Archivo de entorno
-.env
+# --- Copias o backups ---
+*_cleaned.h5
+*_backup.*
+backup/
+old/
+
+# Entorno virtual
+venv/
+

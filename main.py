@@ -140,8 +140,12 @@ def main():
                     print(f"✔️ Tabla '{nombre_tabla}' extraída. Dimensiones: {df.shape}")
                 else:
                     print(f"❌ No se pudo extraer la tabla '{nombre_tabla}'.")
-
         if dataframes:
+            from cleaning import clean_dataframe
+            # 🔹 Limpieza automática de todas las tablas antes de guardar
+            for name, df in dataframes.items():
+                dataframes[name] = clean_dataframe(df)
+
             save_to_hdf5(dataframes, output_dir=OUTPUT_DIR, accumulate=ACCUMULATE, hdf5_file=HDF5_FILE)
             print(f"💾 Tablas guardadas en {OUTPUT_DIR} (diario) {'y ' + HDF5_FILE if ACCUMULATE else ''}")
         else:
