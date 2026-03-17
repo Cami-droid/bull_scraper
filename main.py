@@ -25,6 +25,9 @@ def main():
         if not cookies:
             print("❌ Login fallido o no se obtuvieron cookies. Saliendo del script.")
             return
+        # 🔐 Esperar verificación manual si aparece MFA SACAR LAS DOS LINEAS SIGUIENTES SI NO MOLESTAN CON EL PEDIDO DE UN CODIGO SMS O WHATSAPP
+        print("\n🔐 Si el sitio solicita un código SMS / WhatsApp, ingrésalo ahora.")
+        input("➡️  Presiona ENTER aquí cuando hayas terminado la verificación...")
 
         dataframes = {}
 

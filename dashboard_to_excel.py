@@ -112,6 +112,8 @@ def extract_dashboard_data(driver, dashboard_url, cookies):
         df = pd.DataFrame([data])
         df['fecha_scraping'] = datetime.now()
         
+        df["diferencia_mep_ccl"] = (df["dolar_mep"] - df["dolar_cable_ccl"]).round(2) 
+        
         return df
 
     except Exception as e:

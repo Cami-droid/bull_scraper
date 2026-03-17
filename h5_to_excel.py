@@ -99,6 +99,21 @@ def h5_to_excel(h5_input=None, output_dir=OUTPUT_DIR, excel_output=None, process
                             sheet_name = key.strip('/')[:31]  # Limitar a 31 caracteres (límite de Excel)
                             df.to_excel(writer, sheet_name=sheet_name, index=False)
 
+                            workbook  = writer.book
+                            worksheet = writer.sheets[sheet_name]
+
+                            # formato argentino
+                            fmt_int = workbook.add_format({'num_format': '#.##0'})
+                            fmt_dec = workbook.add_format({'num_format': '#.##0,00'})
+
+                            for col_idx, col in enumerate(df.columns):
+                                if pd.api.types.is_numeric_dtype(df[col]):
+                                    
+                                    # detectar si columna es entera
+                                    if (df[col].dropna() % 1 == 0).all():
+                                        worksheet.set_column(col_idx, col_idx, 16, fmt_int)
+                                    else:
+                                        worksheet.set_column(col_idx, col_idx, 16, fmt_dec)
                     print(f"✔️ Conversión completada! Archivo creado: {excel_file}")
 
             except ValueError as ve:
@@ -115,3 +130,4 @@ def h5_to_excel(h5_input=None, output_dir=OUTPUT_DIR, excel_output=None, process
 if __name__ == "__main__":
     # Procesar todos los HDF5 en data/hdf5_dumps y guardar Excel en data/excel_dumps
     h5_to_excel(process_all_daily=True, skip_existing=True)
+    print("recordá que el separador de miles es . y sumado a eso cuando el numero es entero le agrega .0 donde el . es separador decimal")
