@@ -1,4 +1,3 @@
-
 import pandas as pd
 import os
 import sys
@@ -35,6 +34,70 @@ def _compute_excel_name(h5_path: str) -> str:
         return f"cotizaciones_bullmarket_{suffix}.xlsx"
     else:
         return "cotizaciones_bullmarket_completo.xlsx"
+
+
+def _limpiar_columnas_numericas(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Intenta convertir a número las columnas string que parecen numéricas.
+    Maneja formato argentino: punto como separador de miles, coma como decimal.
+    Ej: "1.456" -> 1456, "1.456,78" -> 1456.78
+    Columnas con prefijo de moneda (ej: "ARS 107,88") se dejan como string.
+    Columnas que ya son numéricas no se tocan.
+    """
+    for col in df.columns:
+        if pd.api.types.is_numeric_dtype(df[col]):
+            continue  # ya es número, no tocar
+
+        muestra = df[col].dropna().astype(str)
+        muestra = muestra[muestra != '-']
+        if muestra.empty:
+            continue
+
+        # Si más del 20% de los valores empiezan con letra, no es columna numérica
+        tiene_letra = muestra.str.match(r'^[A-Za-z]').mean()
+        if tiene_letra > 0.2:
+            continue
+
+        # Detectar formato analizando la parte decimal:
+        # - Punto con exactamente 3 decimales -> separador de miles (ej: "5.109", "52.105")
+        # - Punto con != 3 decimales           -> decimal real      (ej: "210.0", "979.0")
+        # - Con coma                           -> formato argentino (ej: "1.456,78")
+        tiene_coma = muestra.str.contains(',', regex=False).mean() > 0.5
+
+        con_punto = muestra[muestra.str.contains(r'\.', regex=True)]
+        if not con_punto.empty and not tiene_coma:
+            # Contar cuántos tienen exactamente 3 dígitos tras el punto
+            tres_decimales = con_punto.str.match(r'^\d+\.\d{3}$').mean()
+            punto_es_miles = tres_decimales > 0.5
+        else:
+            punto_es_miles = False
+
+        if tiene_coma:
+            # Formato argentino: "1.456,78" -> quitar punto de miles, coma a decimal
+            intentar = (muestra
+                        .str.replace('.', '', regex=False)
+                        .str.replace(',', '.', regex=False))
+        elif punto_es_miles:
+            # Punto de miles: "5.109" -> "5109"
+            intentar = muestra.str.replace('.', '', regex=False)
+        else:
+            # Punto decimal real: "210.0" -> convertir directo
+            intentar = muestra
+
+        convertido = pd.to_numeric(intentar, errors='coerce')
+
+        # Solo reemplazar si la mayoria se convirtio bien (evitar falsos positivos)
+        if convertido.notna().mean() > 0.8:
+            if tiene_coma:
+                df[col] = (df[col].astype(str)
+                           .str.replace('.', '', regex=False)
+                           .str.replace(',', '.', regex=False))
+            elif punto_es_miles:
+                df[col] = df[col].astype(str).str.replace('.', '', regex=False)
+            df[col] = pd.to_numeric(df[col].astype(str), errors='coerce')
+
+    return df
+
 
 def h5_to_excel(h5_input=None, output_dir=OUTPUT_DIR, excel_output=None, process_all_daily=False,
                 skip_existing=True, excel_dir: Optional[str] = None):
@@ -96,24 +159,15 @@ def h5_to_excel(h5_input=None, output_dir=OUTPUT_DIR, excel_output=None, process
                         for key in keys:
                             print(f"Convirtiendo la tabla '{key.strip('/')}' a una hoja de cálculo...")
                             df = pd.read_hdf(h5_file, key=key)
+
+                            # Limpiar columnas numéricas guardadas como string (ej: "1.456" -> 1456)
+                            df = _limpiar_columnas_numericas(df)
+
                             sheet_name = key.strip('/')[:31]  # Limitar a 31 caracteres (límite de Excel)
                             df.to_excel(writer, sheet_name=sheet_name, index=False)
 
-                            workbook  = writer.book
-                            worksheet = writer.sheets[sheet_name]
-
-                            # formato argentino
-                            fmt_int = workbook.add_format({'num_format': '#.##0'})
-                            fmt_dec = workbook.add_format({'num_format': '#.##0,00'})
-
-                            for col_idx, col in enumerate(df.columns):
-                                if pd.api.types.is_numeric_dtype(df[col]):
-                                    
-                                    # detectar si columna es entera
-                                    if (df[col].dropna() % 1 == 0).all():
-                                        worksheet.set_column(col_idx, col_idx, 16, fmt_int)
-                                    else:
-                                        worksheet.set_column(col_idx, col_idx, 16, fmt_dec)
+                            # No se aplica formato de visualizacion argentino:
+                            # hacerlo causa que pandas lea los numeros como texto al reabrir el Excel.
                     print(f"✔️ Conversión completada! Archivo creado: {excel_file}")
 
             except ValueError as ve:
@@ -130,4 +184,3 @@ def h5_to_excel(h5_input=None, output_dir=OUTPUT_DIR, excel_output=None, process
 if __name__ == "__main__":
     # Procesar todos los HDF5 en data/hdf5_dumps y guardar Excel en data/excel_dumps
     h5_to_excel(process_all_daily=True, skip_existing=True)
-    print("recordá que el separador de miles es . y sumado a eso cuando el numero es entero le agrega .0 donde el . es separador decimal")

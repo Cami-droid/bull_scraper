@@ -30,5 +30,5 @@ URLS = [
     "https://www.bullmarketbrokers.com/Cotizaciones/fondos",
     "https://www.bullmarketbrokers.com/Cotizaciones/cauciones",
     "https://www.bullmarketbrokers.com/Cotizaciones/obligacionesNegociables",
-    "https://www.bullmarketbrokers.com/Cotizaciones/US"
+   "https://www.bullmarketbrokers.com/Cotizaciones/US"
 ]

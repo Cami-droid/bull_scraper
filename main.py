@@ -1,162 +1,189 @@
+import logging
+import os
+import sys
+import traceback
+from datetime import datetime
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
 from config import *
 from login import perform_login
 from scraper import extract_table
 from storage import save_to_hdf5
 from utils import sanitize_column_names
-import os
+
+# ─── ARCHIVO DE LOG (solo resumen) ───────────────────────────────────────────
+timestamp_str = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+LOG_RESUMEN = f"log_resumen_{timestamp_str}.txt"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s  %(levelname)-8s  %(message)s",
+    datefmt="%H:%M:%S",
+    handlers=[
+        logging.FileHandler(LOG_RESUMEN, encoding="utf-8"),
+        logging.StreamHandler(sys.stdout),
+    ]
+)
+log = logging.getLogger(__name__)
+# ─────────────────────────────────────────────────────────────────────────────
+
 
 def main():
+    log.info("=" * 60)
+    log.info("INICIO DE EJECUCIÓN")
+    log.info(f"Python: {sys.version.split()[0]}")
+    log.info(f"Directorio: {os.getcwd()}")
+    log.info(f"CHROMEDRIVER_PATH: {CHROMEDRIVER_PATH}")
+    log.info(f"BMB_USERNAME: {BMB_USERNAME}")
+    log.info(f"URLs a procesar: {len(URLS)}")
+    log.info("=" * 60)
+
+    driver = None
     try:
-        if not os.path.exists(CHROMEDRIVER_PATH):
-            print("❌ Chromedriver no encontrado.")
+        # ── ChromeDriver ──────────────────────────────────────────────────
+        if not CHROMEDRIVER_PATH or not os.path.exists(CHROMEDRIVER_PATH):
+            log.error(f"Chromedriver NO encontrado en: '{CHROMEDRIVER_PATH}'")
             return
 
+        log.info("Iniciando Chrome...")
         service = ChromeService(executable_path=CHROMEDRIVER_PATH)
         driver = webdriver.Chrome(service=service)
+        log.info("Chrome iniciado OK")
 
-        print("\nIniciando proceso de autenticación...")
+        # ── Login ─────────────────────────────────────────────────────────
+        log.info("Iniciando login...")
         cookies = perform_login(driver, BMB_USERNAME, BMB_PASSWORD, LOGIN_URL)
 
         if not cookies:
-            print("❌ Login fallido o no se obtuvieron cookies. Saliendo del script.")
+            log.error("Login FALLIDO — no se obtuvieron cookies.")
             return
-        # 🔐 Esperar verificación manual si aparece MFA SACAR LAS DOS LINEAS SIGUIENTES SI NO MOLESTAN CON EL PEDIDO DE UN CODIGO SMS O WHATSAPP
-        print("\n🔐 Si el sitio solicita un código SMS / WhatsApp, ingrésalo ahora.")
-        input("➡️  Presiona ENTER aquí cuando hayas terminado la verificación...")
+
+        log.info(f"Login OK. Cookies obtenidas: {len(cookies)}")
+
+        # 🔐 MFA — SACAR estas dos líneas si no pide verificación SMS/WhatsApp
+        log.info("Esperando verificación MFA manual...")
+        input("➡️  Presiona ENTER cuando hayas completado la verificación (SMS/WhatsApp)...")
 
         dataframes = {}
 
-        # 🔹 Extraer tablas de cotizaciones
+        # ── Iterar URLs ───────────────────────────────────────────────────
         for url in URLS:
             nombre_tabla = url.split("/")[-1].replace('%20', ' ')
-            
-            # --- Lógica específica para la tabla de cauciones ---
+            log.info("-" * 50)
+            log.info(f"Procesando: {url}")
+
+            # ── Cauciones ────────────────────────────────────────────────
             if 'cauciones' in url:
-                print(f"📥 Procesando la tabla de cauciones (pesos)...")
-                
-                # Intentar extraer la tabla de cauciones en pesos
+                log.info("Cauciones — extrayendo pesos...")
                 df_pesos = extract_table(driver, url, cookies)
-                
-                # --- Lógica de rescate si la tabla no se carga ---
+
                 if df_pesos is None or df_pesos.empty:
-                    print("❌ La tabla de cauciones no se encontró. Intentando con el 'empujón'...")
+                    log.warning(f"[{nombre_tabla}_pesos] vacía — intentando rescate")
                     try:
-                        # Espera explícita a que la tabla se vuelva a cargar
-                        # Usar JavaScript para hacer clic, ya que es más robusto
-                        driver.execute_script("document.querySelector('#div_priceActives > div > label').click();")
-                        
+                        driver.execute_script(
+                            "document.querySelector('#div_priceActives > div > label').click();"
+                        )
                         WebDriverWait(driver, 10).until(
                             EC.visibility_of_element_located((By.CSS_SELECTOR, "#prices-table"))
                         )
-                        print("✔️ Botón 'Ocultar sin precios' activado. Reintentando la extracción de la tabla de pesos...")
-
-                        # Reintentar la extracción de la tabla de cauciones en pesos
                         df_pesos = extract_table(driver, is_loaded=True)
+
                         if df_pesos is not None and not df_pesos.empty:
                             df_pesos = sanitize_column_names(df_pesos)
                             dataframes[f'{nombre_tabla}_pesos'] = df_pesos
-                            print(f"✔️ Tabla '{nombre_tabla}' en pesos extraída después del rescate. Dimensiones: {df_pesos.shape}")
+                            log.info(f"[{nombre_tabla}_pesos] rescatada. Shape: {df_pesos.shape}")
                         else:
-                            print(f"❌ No se pudo extraer la tabla '{nombre_tabla}' en pesos después del reintento.")
-
-                    except Exception as e:
-                        print(f"❗ Falló el intento de 'rescate': {e}")
-                        print(f"❌ No se pudo extraer la tabla '{nombre_tabla}' en pesos.")
-
-                # Si la extracción inicial fue exitosa, solo sanitiza y guarda
-                elif df_pesos is not None and not df_pesos.empty:
+                            log.error(f"[{nombre_tabla}_pesos] falló incluso después del rescate.")
+                    except Exception:
+                        log.error(f"Excepción en rescate cauciones pesos:\n{traceback.format_exc()}")
+                else:
                     df_pesos = sanitize_column_names(df_pesos)
                     dataframes[f'{nombre_tabla}_pesos'] = df_pesos
-                    print(f"✔️ Tabla '{nombre_tabla}' en pesos extraída. Dimensiones: {df_pesos.shape}")
+                    log.info(f"[{nombre_tabla}_pesos] OK. Shape: {df_pesos.shape}")
 
-                # Cambiar a la vista de Dólares haciendo clic en el botón
-                print("🔄 Cambiando a la vista de Dólares...")
+                # Cambiar a dólares
+                log.info("Cambiando a vista Dólares...")
                 try:
                     boton_dolares = WebDriverWait(driver, 10).until(
-                        EC.element_to_be_clickable((By.CSS_SELECTOR, "#panelFilters > div > div > div > div > div.filter-group > ul > li:nth-child(2) > button"))
+                        EC.element_to_be_clickable((By.CSS_SELECTOR,
+                            "#panelFilters > div > div > div > div > div.filter-group > ul > li:nth-child(2) > button"))
                     )
                     boton_dolares.click()
-                    
-                    # Espera explícita a que el elemento con ID 'prices-table' se vuelva a cargar
                     WebDriverWait(driver, 10).until(
                         EC.visibility_of_element_located((By.CSS_SELECTOR, "#prices-table"))
                     )
-                    
-                    print("✔️ Vista de 'Dólares' cargada.")
-
-                    # Extraer la tabla de cauciones en dólares
-                    print(f"📥 Procesando la tabla de cauciones (dólares)...")
-                    # Llama a la función sin la URL y con is_loaded=True
                     df_dolar = extract_table(driver, is_loaded=True)
+
                     if df_dolar is not None and not df_dolar.empty:
                         df_dolar = sanitize_column_names(df_dolar)
                         dataframes[f'{nombre_tabla}_dolar'] = df_dolar
-                        print(f"✔️ Tabla '{nombre_tabla}' en dólares extraída. Dimensiones: {df_dolar.shape}")
+                        log.info(f"[{nombre_tabla}_dolar] OK. Shape: {df_dolar.shape}")
                     else:
-                        print(f"❌ No se pudo extraer la tabla '{nombre_tabla}' en dólares.")
-                except Exception as e:
-                    print(f"❗ Error al intentar extraer la tabla de cauciones en dólares: {e}")
-            
-            # --- Lógica específica para la tabla de lebacs ---
+                        log.error(f"[{nombre_tabla}_dolar] vacía.")
+                except Exception:
+                    log.error(f"Excepción cauciones dólares:\n{traceback.format_exc()}")
+
             elif 'lebacs' in url:
-                print(f"📥 Procesando la tabla de lebacs...")
+                log.info("LEBACs...")
                 df_lebacs = extract_table(driver, url, cookies)
-                
+
                 if df_lebacs is None or df_lebacs.empty:
-                    print("❌ La tabla de lebacs no se encontró. Intentando el 'empujón'...")
+                    log.warning(f"[{nombre_tabla}] vacía — intentando rescate")
                     try:
-                        # Usar el mismo selector que para cauciones
-                        driver.execute_script("document.querySelector('#div_priceActives > div > label').click();")
-                        
+                        driver.execute_script(
+                            "document.querySelector('#div_priceActives > div > label').click();"
+                        )
                         WebDriverWait(driver, 10).until(
                             EC.visibility_of_element_located((By.CSS_SELECTOR, "#prices-table"))
                         )
-                        print("✔️ Botón activado. Reintentando la extracción...")
-                        
                         df_lebacs = extract_table(driver, is_loaded=True)
+
                         if df_lebacs is not None and not df_lebacs.empty:
                             df_lebacs = sanitize_column_names(df_lebacs)
                             dataframes[nombre_tabla] = df_lebacs
-                            print(f"✔️ Tabla '{nombre_tabla}' extraída después del rescate. Dimensiones: {df_lebacs.shape}")
+                            log.info(f"[{nombre_tabla}] rescatada. Shape: {df_lebacs.shape}")
                         else:
-                            print(f"❌ No se pudo extraer la tabla '{nombre_tabla}' después del reintento.")
-                    except Exception as e:
-                        print(f"❗ Falló el intento de 'rescate' para LEBACs: {e}")
-                        print(f"❌ No se pudo extraer la tabla '{nombre_tabla}'.")
+                            log.error(f"[{nombre_tabla}] falló incluso después del rescate.")
+                    except Exception:
+                        log.error(f"Excepción rescate LEBACs:\n{traceback.format_exc()}")
                 else:
                     df_lebacs = sanitize_column_names(df_lebacs)
                     dataframes[nombre_tabla] = df_lebacs
-                    print(f"✔️ Tabla '{nombre_tabla}' extraída. Dimensiones: {df_lebacs.shape}")
-            
-            # --- Lógica para el resto de tablas ---
+                    log.info(f"[{nombre_tabla}] OK. Shape: {df_lebacs.shape}")
+
             else:
-                print(f"📥 Procesando: {nombre_tabla}")
                 df = extract_table(driver, url, cookies)
                 if df is not None and not df.empty:
                     df = sanitize_column_names(df)
                     dataframes[nombre_tabla] = df
-                    print(f"✔️ Tabla '{nombre_tabla}' extraída. Dimensiones: {df.shape}")
+                    log.info(f"[{nombre_tabla}] OK. Shape: {df.shape}")
                 else:
-                    print(f"❌ No se pudo extraer la tabla '{nombre_tabla}'.")
-        if dataframes:
-           #from cleaning import clean_dataframe
-            # 🔹 Limpieza automática de todas las tablas antes de guardar
-           #for name, df in dataframes.items():
-               #dataframes[name] = clean_dataframe(df)
-            save_to_hdf5(dataframes, output_dir=OUTPUT_DIR, accumulate=ACCUMULATE, hdf5_file=HDF5_FILE)
-            print(f"💾 Tablas guardadas en {OUTPUT_DIR} (diario) {'y ' + HDF5_FILE if ACCUMULATE else ''}")
-        else:
-            print("⚠️ No se obtuvieron datos para guardar.")
+                    log.error(f"[{nombre_tabla}] FALLÓ — tabla vacía o no encontrada.")
 
-    except Exception as e:
-        print(f"❌ Error en la ejecución: {e}")
+        # ── Guardar ───────────────────────────────────────────────────────
+        log.info("-" * 50)
+        if dataframes:
+            tablas_ok = list(dataframes.keys())
+            log.info(f"Tablas obtenidas ({len(tablas_ok)}): {tablas_ok}")
+            save_to_hdf5(dataframes, output_dir=OUTPUT_DIR, accumulate=ACCUMULATE, hdf5_file=HDF5_FILE)
+            log.info(f"Guardado en {OUTPUT_DIR}")
+        else:
+            log.warning("No se obtuvieron datos para guardar.")
+
+    except Exception:
+        log.critical(f"Error fatal:\n{traceback.format_exc()}")
     finally:
-        driver.quit()
+        if driver:
+            driver.quit()
+            log.info("Chrome cerrado.")
+        log.info(f"Log resumen guardado en: {LOG_RESUMEN}")
+        log.info("=== FIN ===")
+
 
 if __name__ == "__main__":
     main()

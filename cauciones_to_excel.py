@@ -106,7 +106,8 @@ def extract_cauciones_rates(driver, cauciones_url, cookies):
         data["caucion_tna_usd"] = None
 
     df = pd.DataFrame([data])
-    df["fecha_scraping"] = datetime.now()
+    df['fecha_scraping'] = pd.Timestamp(datetime.now()).as_unit('us')
+
     return df
 
 
@@ -135,6 +136,7 @@ if __name__ == "__main__":
 
             # Guardar en HDF5
             try:
+                df_rates['fecha_scraping'] = df_rates['fecha_scraping'].astype('datetime64[us]')
                 with pd.HDFStore(HDF5_ACCUMULATED_FILE, mode="a", complib="blosc", complevel=9) as store:
                     store.put(HDF5_CAUCIONES_KEY, df_rates, format="table", append=True, data_columns=True)
                 print("✔️ HDF5 guardado exitosamente.")
