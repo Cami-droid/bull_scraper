@@ -1,0 +1,131 @@
+09:17:00  INFO      ============================================================
+09:17:00  INFO      INICIO DE EJECUCIÓN
+09:17:00  INFO      Python: 3.14.3
+09:17:00  INFO      Directorio: c:\Users\USUARIO\Documents\docs\bull_scraper
+09:17:00  INFO      CHROMEDRIVER_PATH: C:\Users\USUARIO\Documents\chromedriver.exe
+09:17:00  INFO      BMB_USERNAME: camgmanzur@gmail.com
+09:17:00  INFO      URLs a procesar: 12
+09:17:00  INFO      ============================================================
+09:17:00  INFO      Iniciando Chrome...
+09:17:01  INFO      Chrome iniciado OK
+09:17:01  INFO      Iniciando login...
+09:19:02  WARNING   Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPConnectionPool(host='localhost', port=50751): Read timed out. (read timeout=120)")': /session/ba15c5ca2f5dfcc213f98ec2504d8f06/url
+09:19:03  INFO      Login OK. Cookies obtenidas: 6
+09:19:03  INFO      Esperando verificación MFA manual...
+09:19:03  INFO      --------------------------------------------------
+09:19:03  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/merval
+09:19:25  ERROR     [merval] FALLÓ — tabla vacía o no encontrada.
+09:19:25  INFO      --------------------------------------------------
+09:19:25  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/panel%20general
+09:19:46  ERROR     [panel general] FALLÓ — tabla vacía o no encontrada.
+09:19:46  INFO      --------------------------------------------------
+09:19:46  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/cedears
+09:20:07  ERROR     [cedears] FALLÓ — tabla vacía o no encontrada.
+09:20:07  INFO      --------------------------------------------------
+09:20:07  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/bonos
+09:20:29  ERROR     [bonos] FALLÓ — tabla vacía o no encontrada.
+09:20:29  INFO      --------------------------------------------------
+09:20:29  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/opciones
+09:20:50  ERROR     [opciones] FALLÓ — tabla vacía o no encontrada.
+09:20:50  INFO      --------------------------------------------------
+09:20:50  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/letras
+09:21:11  ERROR     [letras] FALLÓ — tabla vacía o no encontrada.
+09:21:11  INFO      --------------------------------------------------
+09:21:11  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/rofex
+09:21:32  ERROR     [rofex] FALLÓ — tabla vacía o no encontrada.
+09:21:32  INFO      --------------------------------------------------
+09:21:32  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/licitaciones
+09:21:54  ERROR     [licitaciones] FALLÓ — tabla vacía o no encontrada.
+09:21:54  INFO      --------------------------------------------------
+09:21:54  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/fondos
+09:22:15  ERROR     [fondos] FALLÓ — tabla vacía o no encontrada.
+09:22:15  INFO      --------------------------------------------------
+09:22:15  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/cauciones
+09:22:15  INFO      Cauciones — extrayendo pesos...
+09:22:36  WARNING   [cauciones_pesos] vacía — intentando rescate
+09:22:36  ERROR     Excepción en rescate cauciones pesos:
+Traceback (most recent call last):
+  File "c:\Users\USUARIO\Documents\docs\bull_scraper\main.py", line 88, in main
+    driver.execute_script(
+    ~~~~~~~~~~~~~~~~~~~~~^
+        "document.querySelector('#div_priceActives > div > label').click();"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 532, in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.JavascriptException: Message: javascript error: Cannot read properties of null (reading 'click')
+  (Session info: chrome=147.0.7727.138)
+Stacktrace:
+	chromedriver!GetHandleVerifier [0x7ff62ae310a5+14cc5]
+	chromedriver!GetHandleVerifier [0x7ff62ae31110+14d30]
+	chromedriver!(No symbol) [0x7ff62ab9db6d]
+	chromedriver!(No symbol) [0x7ff62aba5af1]
+	chromedriver!(No symbol) [0x7ff62aba8faf]
+	chromedriver!(No symbol) [0x7ff62ac45351]
+	chromedriver!(No symbol) [0x7ff62ac2036a]
+	chromedriver!(No symbol) [0x7ff62ac43f7b]
+	chromedriver!(No symbol) [0x7ff62abe96e8]
+	chromedriver!(No symbol) [0x7ff62abea5d3]
+	chromedriver!GetHandleVerifier [0x7ff62b135ddd+3199fd]
+	chromedriver!GetHandleVerifier [0x7ff62b1304bd+3140dd]
+	chromedriver!GetHandleVerifier [0x7ff62b1529ba+3365da]
+	chromedriver!GetHandleVerifier [0x7ff62ae4ca45+30665]
+	chromedriver!GetHandleVerifier [0x7ff62ae55b9c+397bc]
+	chromedriver!GetHandleVerifier [0x7ff62ae3a4c4+1e0e4]
+	chromedriver!GetHandleVerifier [0x7ff62ae3a676+1e296]
+	chromedriver!GetHandleVerifier [0x7ff62ae1ef87+2ba7]
+	KERNEL32!BaseThreadInitThunk [0x7ffbef13e8d7+17]
+	ntdll!RtlUserThreadStart [0x7ffbf018c3fc+2c]
+
+
+09:22:36  INFO      Cambiando a vista Dólares...
+09:22:46  ERROR     Excepción cauciones dólares:
+Traceback (most recent call last):
+  File "c:\Users\USUARIO\Documents\docs\bull_scraper\main.py", line 112, in main
+    boton_dolares = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR,
+            "#panelFilters > div > div > div > div > div.filter-group > ul > li:nth-child(2) > button"))
+    )
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\support\wait.py", line 121, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+Stacktrace:
+	chromedriver!GetHandleVerifier [0x7ff62ae310a5+14cc5]
+	chromedriver!GetHandleVerifier [0x7ff62ae31110+14d30]
+	chromedriver!(No symbol) [0x7ff62ab9db6d]
+	chromedriver!(No symbol) [0x7ff62abf7082]
+	chromedriver!(No symbol) [0x7ff62abf738c]
+	chromedriver!(No symbol) [0x7ff62ac473f7]
+	chromedriver!(No symbol) [0x7ff62ac43f7b]
+	chromedriver!(No symbol) [0x7ff62abe96e8]
+	chromedriver!(No symbol) [0x7ff62abea5d3]
+	chromedriver!GetHandleVerifier [0x7ff62b135ddd+3199fd]
+	chromedriver!GetHandleVerifier [0x7ff62b1304bd+3140dd]
+	chromedriver!GetHandleVerifier [0x7ff62b1529ba+3365da]
+	chromedriver!GetHandleVerifier [0x7ff62ae4ca45+30665]
+	chromedriver!GetHandleVerifier [0x7ff62ae55b9c+397bc]
+	chromedriver!GetHandleVerifier [0x7ff62ae3a4c4+1e0e4]
+	chromedriver!GetHandleVerifier [0x7ff62ae3a676+1e296]
+	chromedriver!GetHandleVerifier [0x7ff62ae1ef87+2ba7]
+	KERNEL32!BaseThreadInitThunk [0x7ffbef13e8d7+17]
+	ntdll!RtlUserThreadStart [0x7ffbf018c3fc+2c]
+
+
+09:22:46  INFO      --------------------------------------------------
+09:22:46  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/obligacionesNegociables
+09:23:08  ERROR     [obligacionesNegociables] FALLÓ — tabla vacía o no encontrada.
+09:23:08  INFO      --------------------------------------------------
+09:23:08  INFO      Procesando: https://www.bullmarketbrokers.com/Cotizaciones/US
+09:23:29  ERROR     [US] FALLÓ — tabla vacía o no encontrada.
+09:23:29  INFO      --------------------------------------------------
+09:23:29  WARNING   No se obtuvieron datos para guardar.
+09:23:33  INFO      Chrome cerrado.
+09:23:33  INFO      Log resumen guardado en: log_resumen_2026-05-04_09-17-00.txt
+09:23:33  INFO      === FIN ===

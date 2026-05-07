@@ -1,0 +1,101 @@
+23:09:38  INFO      ============================================================
+23:09:38  INFO      INICIO DE EJECUCIÓN
+23:09:38  INFO      Python: 3.14.3
+23:09:38  INFO      Directorio: c:\Users\USUARIO\Documents\docs\bull_scraper
+23:09:38  INFO      CHROMEDRIVER_PATH: C:\Users\USUARIO\Documents\chromedriver.exe
+23:09:38  INFO      BMB_USERNAME: camgmanzur@gmail.com
+23:09:38  INFO      URLs a procesar: 12
+23:09:38  INFO      ============================================================
+23:09:38  INFO      Iniciando Chrome...
+23:09:38  INFO      Chrome iniciado OK
+23:09:38  INFO      Iniciando login...
+23:09:47  INFO      Login OK. Cookies obtenidas: 11
+23:09:47  INFO      Esperando verificación MFA manual...
+23:09:50  INFO      --------------------------------------------------
+23:09:50  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/merval
+23:10:04  ERROR     [merval] FALLÓ — tabla vacía o no encontrada.
+23:10:04  INFO      --------------------------------------------------
+23:10:04  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/panel%20general
+23:10:10  INFO      [panel general] OK. Shape: (204, 17)
+23:10:10  INFO      --------------------------------------------------
+23:10:10  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/cedears
+23:10:12  ERROR     [cedears] FALLÓ — tabla vacía o no encontrada.
+23:10:12  INFO      --------------------------------------------------
+23:10:12  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/bonos
+23:10:12  ERROR     [bonos] FALLÓ — tabla vacía o no encontrada.
+23:10:12  INFO      --------------------------------------------------
+23:10:12  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/opciones
+23:10:12  ERROR     [opciones] FALLÓ — tabla vacía o no encontrada.
+23:10:12  INFO      --------------------------------------------------
+23:10:12  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/letras
+23:10:12  ERROR     [letras] FALLÓ — tabla vacía o no encontrada.
+23:10:12  INFO      --------------------------------------------------
+23:10:12  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/rofex
+23:10:12  ERROR     [rofex] FALLÓ — tabla vacía o no encontrada.
+23:10:12  INFO      --------------------------------------------------
+23:10:12  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/licitaciones
+23:10:12  ERROR     [licitaciones] FALLÓ — tabla vacía o no encontrada.
+23:10:12  INFO      --------------------------------------------------
+23:10:12  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/fondos
+23:10:12  ERROR     [fondos] FALLÓ — tabla vacía o no encontrada.
+23:10:12  INFO      --------------------------------------------------
+23:10:12  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/cauciones
+23:10:12  INFO      Cauciones — extrayendo pesos...
+23:10:12  WARNING   [cauciones_pesos] vacía — intentando rescate
+23:10:12  ERROR     Excepción en rescate cauciones pesos:
+Traceback (most recent call last):
+  File "c:\Users\USUARIO\Documents\docs\bull_scraper\main.py", line 88, in main
+    driver.execute_script(
+    ~~~~~~~~~~~~~~~~~~~~~^
+        "document.querySelector('#div_priceActives > div > label').click();"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 532, in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: tab crashed
+  (Session info: chrome=147.0.7727.139)
+
+
+23:10:12  INFO      Cambiando a vista Dólares...
+23:10:12  ERROR     Excepción cauciones dólares:
+Traceback (most recent call last):
+  File "c:\Users\USUARIO\Documents\docs\bull_scraper\main.py", line 112, in main
+    boton_dolares = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR,
+            "#panelFilters > div > div > div > div > div.filter-group > ul > li:nth-child(2) > button"))
+    )
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\support\wait.py", line 112, in until
+    value = method(self._driver)
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\support\expected_conditions.py", line 514, in _predicate
+    target = driver.find_element(*target)  # grab element at locator
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 816, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: tab crashed
+  (Session info: chrome=147.0.7727.139)
+
+
+23:10:12  INFO      --------------------------------------------------
+23:10:12  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/obligacionesNegociables
+23:10:12  ERROR     [obligacionesNegociables] FALLÓ — tabla vacía o no encontrada.
+23:10:12  INFO      --------------------------------------------------
+23:10:12  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/US
+23:10:12  ERROR     [US] FALLÓ — tabla vacía o no encontrada.
+23:10:12  INFO      --------------------------------------------------
+23:10:12  INFO      Tablas obtenidas (1): ['panel general']
+23:10:12  INFO      Guardado en data/hdf5_dumps
+23:10:16  INFO      Chrome cerrado.
+23:10:16  INFO      Log resumen guardado en: log_resumen_2026-05-05_23-09-38.txt
+23:10:16  INFO      === FIN ===

@@ -1,0 +1,59 @@
+09:29:40  INFO      ============================================================
+09:29:40  INFO      INICIO DE EJECUCIÓN
+09:29:40  INFO      Python: 3.14.3
+09:29:40  INFO      Directorio: c:\Users\USUARIO\Documents\docs\bull_scraper
+09:29:40  INFO      CHROMEDRIVER_PATH: C:\Users\USUARIO\Documents\chromedriver.exe
+09:29:40  INFO      BMB_USERNAME: camgmanzur@gmail.com
+09:29:40  INFO      URLs a procesar: 12
+09:29:40  INFO      ============================================================
+09:29:40  INFO      Iniciando Chrome...
+09:29:41  INFO      Chrome iniciado OK
+09:29:41  INFO      Iniciando login...
+09:29:47  INFO      Login OK. Cookies obtenidas: 11
+09:29:47  INFO      Esperando verificación MFA manual...
+09:29:50  INFO      --------------------------------------------------
+09:29:50  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/merval
+09:29:53  INFO      [merval] OK. Shape: (20, 17)
+09:29:53  INFO      --------------------------------------------------
+09:29:53  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/panel%20general
+09:29:57  INFO      [panel general] OK. Shape: (81, 17)
+09:29:57  INFO      --------------------------------------------------
+09:29:57  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/cedears
+09:30:04  INFO      [cedears] OK. Shape: (632, 18)
+09:30:04  INFO      --------------------------------------------------
+09:30:04  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/bonos
+09:30:07  INFO      [bonos] OK. Shape: (159, 17)
+09:30:07  INFO      --------------------------------------------------
+09:30:07  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/opciones
+09:30:09  INFO      [opciones] OK. Shape: (36, 16)
+09:30:09  INFO      --------------------------------------------------
+09:30:09  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/letras
+09:30:11  INFO      [letras] OK. Shape: (5, 17)
+09:30:11  INFO      --------------------------------------------------
+09:30:11  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/rofex
+09:30:13  INFO      [rofex] OK. Shape: (3, 17)
+09:30:13  INFO      --------------------------------------------------
+09:30:13  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/licitaciones
+09:30:14  INFO      [licitaciones] OK. Shape: (4, 11)
+09:30:14  INFO      --------------------------------------------------
+09:30:14  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/fondos
+09:30:22  INFO      [fondos] OK. Shape: (330, 11)
+09:30:22  INFO      --------------------------------------------------
+09:30:22  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/cauciones
+09:30:22  INFO      Cauciones — extrayendo pesos...
+09:30:50  WARNING   [cauciones_pesos] vacía — intentando rescate
+09:30:51  INFO      [cauciones_pesos] rescatada. Shape: (29, 16)
+09:30:51  INFO      Cambiando a vista Dólares...
+09:30:52  INFO      [cauciones_dolar] OK. Shape: (29, 16)
+09:30:52  INFO      --------------------------------------------------
+09:30:52  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/obligacionesNegociables
+09:31:00  INFO      [obligacionesNegociables] OK. Shape: (486, 17)
+09:31:00  INFO      --------------------------------------------------
+09:31:00  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/US
+09:31:24  INFO      [US] OK. Shape: (793, 13)
+09:31:24  INFO      --------------------------------------------------
+09:31:24  INFO      Tablas obtenidas (13): ['merval', 'panel general', 'cedears', 'bonos', 'opciones', 'letras', 'rofex', 'licitaciones', 'fondos', 'cauciones_pesos', 'cauciones_dolar', 'obligacionesNegociables', 'US']
+09:31:26  INFO      Guardado en data/hdf5_dumps
+09:31:30  INFO      Chrome cerrado.
+09:31:30  INFO      Log resumen guardado en: log_resumen_2026-05-04_09-29-40.txt
+09:31:30  INFO      === FIN ===

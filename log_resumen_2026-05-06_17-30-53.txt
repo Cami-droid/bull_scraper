@@ -1,0 +1,11 @@
+17:30:53  INFO      ============================================================
+17:30:53  INFO      INICIO DE EJECUCIÓN
+17:30:53  INFO      Python: 3.14.3
+17:30:53  INFO      Directorio: C:\Users\USUARIO\Documents\docs\bull_scraper
+17:30:53  INFO      CHROMEDRIVER_PATH: C:\Users\USUARIO\Documents\chromedriver.exe
+17:30:53  INFO      BMB_USERNAME: camgmanzur@gmail.com
+17:30:53  INFO      URLs a procesar: 12
+17:30:53  INFO      ============================================================
+17:30:53  INFO      Iniciando Chrome...
+17:30:54  INFO      Chrome iniciado OK
+17:30:54  INFO      Iniciando login...

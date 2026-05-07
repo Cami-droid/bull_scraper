@@ -1,0 +1,23 @@
+23:00:09  INFO      ============================================================
+23:00:09  INFO      INICIO DE EJECUCIÓN
+23:00:09  INFO      Python: 3.14.3
+23:00:09  INFO      Directorio: c:\Users\USUARIO\Documents\docs\bull_scraper
+23:00:09  INFO      CHROMEDRIVER_PATH: C:\Users\USUARIO\Documents\chromedriver.exe
+23:00:09  INFO      BMB_USERNAME: camgmanzur@gmail.com
+23:00:09  INFO      URLs a procesar: 12
+23:00:09  INFO      ============================================================
+23:00:09  INFO      Iniciando Chrome...
+23:00:10  INFO      Chrome iniciado OK
+23:00:10  INFO      Iniciando login...
+23:00:18  INFO      Login OK. Cookies obtenidas: 11
+23:00:18  INFO      Esperando verificación MFA manual...
+23:00:29  INFO      --------------------------------------------------
+23:00:29  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/merval
+23:00:56  ERROR     [merval] FALLÓ — tabla vacía o no encontrada.
+23:00:56  INFO      --------------------------------------------------
+23:00:56  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/panel%20general
+23:01:19  ERROR     [panel general] FALLÓ — tabla vacía o no encontrada.
+23:01:19  INFO      --------------------------------------------------
+23:01:19  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/cedears
+23:01:31  WARNING   Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectionResetError(10054, 'Se ha forzado la interrupción de una conexión existente por el host remoto', None, 10054, None)': /session/1990d6a48a4142c022952dca872ba541
+23:01:35  WARNING   Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='localhost', port=62442): Failed to establish a new connection: [WinError 10061] No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión")': /session/1990d6a48a4142c022952dca872ba541

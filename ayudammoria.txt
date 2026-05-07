@@ -1,0 +1,3 @@
+python src/config-update.py
+python -m src.data_processing.renew_lecap_list_excel
+python -m src.data_processing.op_ons
