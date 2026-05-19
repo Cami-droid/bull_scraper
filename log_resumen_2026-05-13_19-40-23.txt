@@ -1,0 +1,62 @@
+19:40:23  INFO      ============================================================
+19:40:23  INFO      INICIO DE EJECUCIÓN
+19:40:23  INFO      Python: 3.14.3
+19:40:23  INFO      Directorio: c:\Users\USUARIO\Documents\docs\bull_scraper
+19:40:23  INFO      CHROMEDRIVER_PATH: C:\Users\USUARIO\Documents\chromedriver.exe
+19:40:23  INFO      BMB_USERNAME: camgmanzur@gmail.com
+19:40:23  INFO      URLs a procesar: 13
+19:40:23  INFO      ============================================================
+19:40:23  INFO      Iniciando Chrome...
+19:40:24  INFO      Chrome iniciado OK
+19:40:24  INFO      Iniciando login...
+19:40:28  INFO      Login OK. Cookies obtenidas: 11
+19:40:28  INFO      Esperando verificación MFA manual...
+19:40:29  INFO      --------------------------------------------------
+19:40:29  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/merval
+19:40:33  INFO      [merval] OK. Shape: (20, 17)
+19:40:33  INFO      --------------------------------------------------
+19:40:33  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/panel%20general
+19:40:35  INFO      [panel general] OK. Shape: (78, 17)
+19:40:35  INFO      --------------------------------------------------
+19:40:35  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/cedears
+19:40:42  INFO      [cedears] OK. Shape: (640, 18)
+19:40:42  INFO      --------------------------------------------------
+19:40:42  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/bonos
+19:40:46  INFO      [bonos] OK. Shape: (172, 17)
+19:40:46  INFO      --------------------------------------------------
+19:40:46  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/opciones
+19:40:48  INFO      [opciones] OK. Shape: (26, 16)
+19:40:48  INFO      --------------------------------------------------
+19:40:48  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/letras
+19:40:50  INFO      [letras] OK. Shape: (10, 17)
+19:40:50  INFO      --------------------------------------------------
+19:40:50  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/rofex
+19:41:00  INFO      [rofex] OK. Shape: (151, 17)
+19:41:00  INFO      --------------------------------------------------
+19:41:00  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/licitaciones
+19:41:02  INFO      [licitaciones] OK. Shape: (5, 11)
+19:41:02  INFO      --------------------------------------------------
+19:41:02  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/fondos
+19:41:10  INFO      [fondos] OK. Shape: (331, 11)
+19:41:10  INFO      --------------------------------------------------
+19:41:10  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/fideicomisos
+19:41:12  INFO      [fideicomisos] OK. Shape: (5, 17)
+19:41:12  INFO      --------------------------------------------------
+19:41:12  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/cauciones
+19:41:12  INFO      Cauciones — extrayendo pesos...
+19:41:33  WARNING   [cauciones_pesos] vacía — intentando rescate
+19:41:37  INFO      [cauciones_pesos] rescatada. Shape: (30, 16)
+19:41:37  INFO      Cambiando a vista Dólares...
+19:41:40  INFO      [cauciones_dolar] OK. Shape: (30, 16)
+19:41:40  INFO      --------------------------------------------------
+19:41:40  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/obligacionesNegociables
+19:41:48  INFO      [obligacionesNegociables] OK. Shape: (499, 17)
+19:41:48  INFO      --------------------------------------------------
+19:41:48  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/US
+19:42:16  INFO      [US] OK. Shape: (800, 13)
+19:42:16  INFO      --------------------------------------------------
+19:42:16  INFO      Tablas obtenidas (14): ['merval', 'panel general', 'cedears', 'bonos', 'opciones', 'letras', 'rofex', 'licitaciones', 'fondos', 'fideicomisos', 'cauciones_pesos', 'cauciones_dolar', 'obligacionesNegociables', 'US']
+19:42:18  INFO      Guardado en data/hdf5_dumps
+19:42:21  INFO      Chrome cerrado.
+19:42:21  INFO      Log resumen guardado en: log_resumen_2026-05-13_19-40-23.txt
+19:42:21  INFO      === FIN ===

@@ -1,0 +1,59 @@
+19:10:24  INFO      ============================================================
+19:10:24  INFO      INICIO DE EJECUCIÓN
+19:10:24  INFO      Python: 3.14.3
+19:10:24  INFO      Directorio: c:\Users\USUARIO\Documents\docs\bull_scraper
+19:10:24  INFO      CHROMEDRIVER_PATH: C:\Users\USUARIO\Documents\chromedriver.exe
+19:10:24  INFO      BMB_USERNAME: camgmanzur@gmail.com
+19:10:24  INFO      URLs a procesar: 12
+19:10:24  INFO      ============================================================
+19:10:24  INFO      Iniciando Chrome...
+19:10:25  INFO      Chrome iniciado OK
+19:10:25  INFO      Iniciando login...
+19:10:31  INFO      Login OK. Cookies obtenidas: 11
+19:10:31  INFO      Esperando verificación MFA manual...
+19:10:32  INFO      --------------------------------------------------
+19:10:32  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/merval
+19:10:36  INFO      [merval] OK. Shape: (20, 17)
+19:10:36  INFO      --------------------------------------------------
+19:10:36  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/panel%20general
+19:10:40  INFO      [panel general] OK. Shape: (79, 17)
+19:10:40  INFO      --------------------------------------------------
+19:10:40  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/cedears
+19:10:49  INFO      [cedears] OK. Shape: (633, 18)
+19:10:49  INFO      --------------------------------------------------
+19:10:49  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/bonos
+19:10:52  INFO      [bonos] OK. Shape: (167, 17)
+19:10:52  INFO      --------------------------------------------------
+19:10:52  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/opciones
+19:10:54  INFO      [opciones] OK. Shape: (24, 16)
+19:10:54  INFO      --------------------------------------------------
+19:10:54  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/letras
+19:10:56  INFO      [letras] OK. Shape: (9, 17)
+19:10:56  INFO      --------------------------------------------------
+19:10:56  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/rofex
+19:11:00  INFO      [rofex] OK. Shape: (91, 17)
+19:11:00  INFO      --------------------------------------------------
+19:11:00  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/licitaciones
+19:11:02  INFO      [licitaciones] OK. Shape: (5, 11)
+19:11:02  INFO      --------------------------------------------------
+19:11:02  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/fondos
+19:11:10  INFO      [fondos] OK. Shape: (331, 11)
+19:11:10  INFO      --------------------------------------------------
+19:11:10  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/cauciones
+19:11:10  INFO      Cauciones — extrayendo pesos...
+19:11:32  WARNING   [cauciones_pesos] vacía — intentando rescate
+19:11:35  INFO      [cauciones_pesos] rescatada. Shape: (31, 16)
+19:11:35  INFO      Cambiando a vista Dólares...
+19:11:38  INFO      [cauciones_dolar] OK. Shape: (31, 16)
+19:11:38  INFO      --------------------------------------------------
+19:11:38  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/obligacionesNegociables
+19:11:47  INFO      [obligacionesNegociables] OK. Shape: (501, 17)
+19:11:47  INFO      --------------------------------------------------
+19:11:47  INFO      Procesando: https://inversiones.bullmarket.com.ar/Cotizaciones/US
+19:12:11  INFO      [US] OK. Shape: (796, 13)
+19:12:11  INFO      --------------------------------------------------
+19:12:11  INFO      Tablas obtenidas (13): ['merval', 'panel general', 'cedears', 'bonos', 'opciones', 'letras', 'rofex', 'licitaciones', 'fondos', 'cauciones_pesos', 'cauciones_dolar', 'obligacionesNegociables', 'US']
+19:12:13  INFO      Guardado en data/hdf5_dumps
+19:12:16  INFO      Chrome cerrado.
+19:12:16  INFO      Log resumen guardado en: log_resumen_2026-05-11_19-10-24.txt
+19:12:16  INFO      === FIN ===

@@ -32,6 +32,7 @@ URLS = [
     "https://inversiones.bullmarket.com.ar/Cotizaciones/rofex",
     "https://inversiones.bullmarket.com.ar/Cotizaciones/licitaciones",
     "https://inversiones.bullmarket.com.ar/Cotizaciones/fondos",
+    "https://inversiones.bullmarket.com.ar/Cotizaciones/fideicomisos",
     "https://inversiones.bullmarket.com.ar/Cotizaciones/cauciones",
     "https://inversiones.bullmarket.com.ar/Cotizaciones/obligacionesNegociables",
     "https://inversiones.bullmarket.com.ar/Cotizaciones/US"

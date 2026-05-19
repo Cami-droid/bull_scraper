@@ -1,0 +1,68 @@
+17:03:18  INFO      ============================================================
+17:03:18  INFO      INICIO DE EJECUCIÓN
+17:03:18  INFO      Python: 3.14.3
+17:03:18  INFO      Directorio: c:\Users\USUARIO\Documents\docs\bull_scraper
+17:03:18  INFO      CHROMEDRIVER_PATH: C:\Users\USUARIO\Documents\chromedriver.exe
+17:03:18  INFO      BMB_USERNAME: camgmanzur@gmail.com
+17:03:18  INFO      URLs a procesar: 12
+17:03:18  INFO      ============================================================
+17:03:18  INFO      Iniciando Chrome...
+17:03:22  CRITICAL  Error fatal:
+Traceback (most recent call last):
+  File "c:\Users\USUARIO\Documents\docs\bull_scraper\main.py", line 55, in main
+    driver = webdriver.Chrome(service=service)
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\chrome\webdriver.py", line 45, in __init__
+    super().__init__(
+    ~~~~~~~~~~~~~~~~^
+        browser_name=DesiredCapabilities.CHROME["browserName"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        keep_alive=keep_alive,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\chromium\webdriver.py", line 66, in __init__
+    super().__init__(command_executor=executor, options=self.options)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\common\webdriver.py", line 25, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 271, in __init__
+    self.start_session(capabilities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 366, in start_session
+    response = self.execute(Command.NEW_SESSION, caps)["value"]
+               ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\USUARIO\Documents\docs\bull_scraper\venv\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.SessionNotCreatedException: Message: session not created: This version of ChromeDriver only supports Chrome version 146
+Current browser version is 148.0.7778.97 with binary path C:\Program Files\Google\Chrome\Application\chrome.exe; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#sessionnotcreatedexception
+Stacktrace:
+	chromedriver!GetHandleVerifier [0x7ff72a6a10a5+14cc5]
+	chromedriver!GetHandleVerifier [0x7ff72a6a1110+14d30]
+	chromedriver!(No symbol) [0x7ff72a40db6d]
+	chromedriver!(No symbol) [0x7ff72a45608d]
+	chromedriver!(No symbol) [0x7ff72a454de5]
+	chromedriver!(No symbol) [0x7ff72a44f321]
+	chromedriver!(No symbol) [0x7ff72a449c29]
+	chromedriver!(No symbol) [0x7ff72a49e021]
+	chromedriver!(No symbol) [0x7ff72a49d886]
+	chromedriver!(No symbol) [0x7ff72a4596e8]
+	chromedriver!(No symbol) [0x7ff72a45a5d3]
+	chromedriver!GetHandleVerifier [0x7ff72a9a5ddd+3199fd]
+	chromedriver!GetHandleVerifier [0x7ff72a9a04bd+3140dd]
+	chromedriver!GetHandleVerifier [0x7ff72a9c29ba+3365da]
+	chromedriver!GetHandleVerifier [0x7ff72a6bca45+30665]
+	chromedriver!GetHandleVerifier [0x7ff72a6c5b9c+397bc]
+	chromedriver!GetHandleVerifier [0x7ff72a6aa4c4+1e0e4]
+	chromedriver!GetHandleVerifier [0x7ff72a6aa676+1e296]
+	chromedriver!GetHandleVerifier [0x7ff72a68ef87+2ba7]
+	KERNEL32!BaseThreadInitThunk [0x7fff5feee8d7+17]
+	ntdll!RtlUserThreadStart [0x7fff60b2c3fc+2c]
+
+
+17:03:22  INFO      Log resumen guardado en: log_resumen_2026-05-12_17-03-18.txt
+17:03:22  INFO      === FIN ===
